@@ -1,56 +1,47 @@
 <template>
-  <form class="login-form" @submit.prevent="postLogin">
-    <input
-      type="text"
-      placeholder="Username"
-      class="input-field"
-      v-model="username"
-    />
-    <input
-      type="password"
-      placeholder="Password"
-      class="input-field"
-      v-model="password"
-    />
+  <form class="login-form" @submit.prevent="postSignUp">
+    <input type="text" placeholder="Name" class="input-field" v-model="name" />
+    <input type="email" placeholder="Email" class="input-field" v-model="email" />
+    <input type="text" placeholder="Cellphone" class="input-field" v-model="cellphone" />
+    <input type="password" placeholder="Password" class="input-field" v-model="password" />
     <div class="flex flex-col w-full space-y-2">
-      <button type="submit" class="submit-button">Login</button>
-      <button type="submit" class="submit-button" @click="navigateToSignup()">
-        Sign up
-      </button>
+      <button type="submit" class="submit-button">Register</button>
     </div>
   </form>
 </template>
 
 <script>
 export default {
-  name: "AppLogin",
+  name: "AppSignup",
   data() {
     return {
-      username: "",
+      name: "",
+      email: "",
+      cellphone: "",
       password: "",
     };
   },
   methods: {
-    async postLogin() {
+    async postSignUp() {
       try {
-        const response = await fetch("http://localhost:3001/post-login", {
+        const response = await fetch("http://localhost:3001/post-signup", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            username: this.username,
+            name: this.name,
+            email: this.email,
+            cellphone: this.cellphone,
             password: this.password,
           }),
         });
         const data = await response.json();
         console.log(data);
+        this.$router.push("/");
       } catch (error) {
         console.error(error);
       }
-    },
-    navigateToSignup() {
-      this.$router.push("/signup");
     },
   },
 };
