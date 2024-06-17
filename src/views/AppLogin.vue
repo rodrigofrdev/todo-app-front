@@ -38,7 +38,7 @@ export default {
           headers: {
             "Content-Type": "application/json",
           },
-          credentials: 'include',
+          credentials: 'include', // Permite enviar cookies entre dominios
           body: JSON.stringify({
             email: this.email,
             password: this.password,
@@ -48,6 +48,7 @@ export default {
           this.$router.push("/todos");
         }
       } catch (error) {
+        // TODO: print error message
         console.log(data.message);
       }
     },

@@ -20,19 +20,18 @@ export default createStore({
         const response = await axios.get("http://localhost:3001");
         context.commit("storeTodos", response.data);
       } catch (error) {
+        // TODO: print error message to the user
         console.error("Internal Server Error: ", error);
         throw error;
       }
     },
     async addTodo(context, data) {
-      if (!data.title.trim()) {
-        return false;
-      }
       try {
         const response = await axios.post("http://localhost:3001/add-todo", data);
         const { todo } = response.data;
         context.commit("storeTodo", todo);
       } catch (error) {
+        // TODO: print error message to the user
         console.error("Internal Server Error: ", error);
         throw error;
       }
@@ -42,6 +41,7 @@ export default createStore({
         const response = await axios.post("http://localhost:3001/update-todo", { id, data });
         this.dispatch("getTodos");
       } catch (error) {
+        // TODO: print error message to the user
         console.error("Internal Server Error: ", error);
         throw error;
       }

@@ -36,10 +36,11 @@ export default {
             password: this.password,
           }),
         });
-        const data = await response.json();
-        console.log(data);
-        this.$router.push("/");
+        if (response.status === 200) {
+          this.$router.push("/");
+        }
       } catch (error) {
+        // TODO: print error message
         console.error(error);
       }
     },
