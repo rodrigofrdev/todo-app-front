@@ -7,3 +7,4 @@ Todo List App - Back End
 - [ ] adicionar padrões de acessibilidade
 - [ ] adicionar responsividade
 - [ ] padrozinar apresentações de erros
+- [ ] feature para tradução
