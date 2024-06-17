@@ -1,10 +1,10 @@
 <template>
   <form class="login-form" @submit.prevent="postLogin">
     <input
-      type="text"
-      placeholder="Username"
+      type="email"
+      placeholder="E-mail"
       class="input-field"
-      v-model="username"
+      v-model="email"
     />
     <input
       type="password"
@@ -26,27 +26,29 @@ export default {
   name: "AppLogin",
   data() {
     return {
-      username: "",
+      email: "",
       password: "",
     };
   },
   methods: {
     async postLogin() {
       try {
-        const response = await fetch("http://localhost:3001/post-login", {
+        const response = await fetch("http://localhost:3001/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: 'include',
           body: JSON.stringify({
-            username: this.username,
+            email: this.email,
             password: this.password,
           }),
         });
-        const data = await response.json();
-        console.log(data);
+        if (response.status === 200) {
+          this.$router.push("/todos");
+        }
       } catch (error) {
-        console.error(error);
+        console.log(data.message);
       }
     },
     navigateToSignup() {

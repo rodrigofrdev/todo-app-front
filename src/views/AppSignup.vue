@@ -24,7 +24,7 @@ export default {
   methods: {
     async postSignUp() {
       try {
-        const response = await fetch("http://localhost:3001/post-signup", {
+        const response = await fetch("http://localhost:3001/signup", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
