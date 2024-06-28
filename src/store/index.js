@@ -17,42 +17,54 @@ export default createStore({
   actions: {
     async getTodos(context) {
       try {
-        const response = await axios.get("http://localhost:3001");
+        const response = await axios.get('http://localhost:3001', {
+          withCredentials: true // Enviar cookies da sessão para o servidor
+        });
         context.commit("storeTodos", response.data);
       } catch (error) {
+        // TODO: tratar erro
         console.error("Internal Server Error: ", error);
         throw error;
       }
     },
     async addTodo(context, data) {
-      if (!data.title.trim()) {
-        return false;
-      }
       try {
-        const response = await axios.post("http://localhost:3001/add-todo", data);
-        const { todo } = response.data;
-        context.commit("storeTodo", todo);
-      } catch (error) {
-        console.error("Internal Server Error: ", error);
-        throw error;
-      }
-    },
-    async updateTodo(context, { id, data }) {
-      try {
-        const response = await axios.post("http://localhost:3001/update-todo", { id, data });
+        const response = await axios.post("http://localhost:3001/add-todo", data, {
+          withCredentials: true // Enviar cookies da sessão para o servidor
+        });
         this.dispatch("getTodos");
       } catch (error) {
+        // TODO: tratar erro
         console.error("Internal Server Error: ", error);
         throw error;
       }
     },
-    deleteTodo(context, id) {
+    async updateTodo(context, data) {
+      try {
+        const response = await axios.post("http://localhost:3001/update-todo", data, {
+          withCredentials: true // Enviar cookies da sessão para o servidor
+        });
+        this.dispatch("getTodos");
+      } catch (error) {
+        // TODO: tratar erro
+        console.error("Internal Server Error: ", error);
+        throw error;
+      }
+    },
+    async deleteTodo(context, id) {
       const data = {
         id,
       };
-      return axios.post('http://localhost:3001/delete-todo', data).then(() => {
+      try {
+        const response = await axios.post("http://localhost:3001/delete-todo", data, {
+          withCredentials: true // Enviar cookies da sessão para o servidor
+        });
         this.dispatch("getTodos");
-      });
+      } catch (error) {
+        // TODO: tratar erro
+        console.error("Internal Server Error: ", error);
+        throw error;
+      }
     },
   },
   modules: {},
