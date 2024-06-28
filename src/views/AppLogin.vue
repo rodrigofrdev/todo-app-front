@@ -47,6 +47,9 @@ export default {
         if (response.status === 200) {
           this.$router.push("/todos");
         }
+        if(response.status === 401) {
+          this.$router.push("/login");
+        }
       } catch (error) {
         // TODO: print error message
         console.log(data.message);
