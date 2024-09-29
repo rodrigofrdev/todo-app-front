@@ -8,7 +8,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@primevue/themes": "^4.0.7",
     "json-server": "^1.0.0-alpha.23",
+    "primevue": "^4.0.7",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
     "vuex": "^4.0.0"

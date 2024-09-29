@@ -1,18 +1,28 @@
 <template>
-  <form class="login-form" @submit.prevent="postSignUp">
-    <input type="text" placeholder="Name" class="input-field" v-model="name" />
-    <input type="email" placeholder="Email" class="input-field" v-model="email" />
-    <input type="text" placeholder="Cellphone" class="input-field" v-model="cellphone" />
-    <input type="password" placeholder="Password" class="input-field" v-model="password" />
-    <div class="flex flex-col w-full space-y-2">
-      <button type="submit" class="submit-button">Register</button>
-    </div>
-  </form>
+  <main>
+    <Toast />
+    <form class="login-form" @submit.prevent="postSignUp">
+      <input type="text" placeholder="Name" class="input-field" v-model="name" />
+      <input type="email" placeholder="Email" class="input-field" v-model="email" />
+      <input type="text" placeholder="Cellphone" class="input-field" v-model="cellphone" />
+      <input type="password" placeholder="Password" class="input-field" v-model="password" />
+      <div class="flex flex-col w-full space-y-2">
+        <button type="submit" class="submit-button">Register</button>
+      </div>
+    </form>
+  </main>
 </template>
 
 <script>
+import Toast from "primevue/toast";
+import { signup } from "../services/signupService";
+import { showToast } from "../utils/toastUtil"; // util/mixin
+
 export default {
   name: "AppSignup",
+  components: {
+    Toast,
+  },
   data() {
     return {
       name: "",
@@ -24,24 +34,30 @@ export default {
   methods: {
     async postSignUp() {
       try {
-        const response = await fetch("http://localhost:3001/signup", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: this.name,
-            email: this.email,
-            cellphone: this.cellphone,
-            password: this.password,
-          }),
-        });
-        if (response.status === 201) {
-          this.$router.push("/");
+        if (
+          this.name === "" ||
+          this.email === "" ||
+          this.cellphone === "" ||
+          this.password === ""
+        ) {
+          showToast(
+            this.$toast,
+            "warn",
+            "Warn",
+            "Name, email, cellphone and password are required"
+          );
+          return;
         }
+        const result = await signup(
+          this.name,
+          this.email,
+          this.password,
+          this.cellphone
+        );
+        showToast(this.$toast, "success", "Sucess", result.message);
+        this.$router.push("/");
       } catch (error) {
-        // TODO: print error message
-        console.error(error);
+        showToast(this.$toast, "error", "Error", error); // Exibe cada erro no Toast
       }
     },
   },

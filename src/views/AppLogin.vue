@@ -1,29 +1,29 @@
 <template>
-  <form class="login-form" @submit.prevent="postLogin">
-    <input
-      type="email"
-      placeholder="E-mail"
-      class="input-field"
-      v-model="email"
-    />
-    <input
-      type="password"
-      placeholder="Password"
-      class="input-field"
-      v-model="password"
-    />
-    <div class="flex flex-col w-full space-y-2">
-      <button type="submit" class="submit-button">Login</button>
-      <button type="submit" class="submit-button" @click="navigateToSignup()">
-        Sign up
-      </button>
-    </div>
-  </form>
+  <main>
+    <Toast />
+    <form class="login-form" @submit.prevent="postLogin">
+      <input type="email" placeholder="E-mail" class="input-field" v-model="email" />
+      <input type="password" placeholder="Password" class="input-field" v-model="password" />
+      <div class="flex flex-col w-full space-y-2">
+        <button type="submit" class="submit-button">Login</button>
+        <button type="submit" class="submit-button" @click="navigateToSignup()">
+          Sign up
+        </button>
+      </div>
+    </form>
+  </main>
 </template>
 
 <script>
+import Toast from "primevue/toast";
+import { login } from "../services/authService";
+import { showToast } from "../utils/toastUtil"; // util/mixin
+
 export default {
   name: "AppLogin",
+  components: {
+    Toast,
+  },
   data() {
     return {
       email: "",
@@ -33,26 +33,20 @@ export default {
   methods: {
     async postLogin() {
       try {
-        const response = await fetch("http://localhost:3001/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: 'include', // Permite enviar cookies entre dominios
-          body: JSON.stringify({
-            email: this.email,
-            password: this.password,
-          }),
-        });
-        if (response.status === 200) {
-          this.$router.push("/todos");
+        if (this.email === "" || this.password === "") {
+          showToast(
+            this.$toast,
+            "warn",
+            "Warn",
+            "Email and password are required"
+          );
+          return;
         }
-        if(response.status === 401) {
-          this.$router.push("/login");
-        }
+        const result = await login(this.email, this.password);
+        showToast(this.$toast, "success", "Sucess", result.message);
+        this.$router.push("/todos");
       } catch (error) {
-        // TODO: print error message
-        console.log(data.message);
+        showToast(this.$toast, "error", "Error", error.message);
       }
     },
     navigateToSignup() {

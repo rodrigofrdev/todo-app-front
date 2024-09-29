@@ -1,5 +1,0 @@
-# Fetch / Axios
-
-  credentials: permite enviar cookies junto com as requisições. Isso é especialmente importante se seu frontend estiver em um domínio diferente do backend.
-
-  
